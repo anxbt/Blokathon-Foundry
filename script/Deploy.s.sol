@@ -7,8 +7,12 @@ import {IDiamondLoupe} from "src/facets/baseFacets/loupe/IDiamondLoupe.sol";
 import {IERC165} from "src/interfaces/IERC165.sol";
 import {IERC173} from "src/interfaces/IERC173.sol";
 import {DiamondCutFacet} from "src/facets/baseFacets/cut/DiamondCutFacet.sol";
-import {DiamondLoupeFacet} from "src/facets/baseFacets/loupe/DiamondLoupeFacet.sol";
-import {OwnershipFacet} from "src/facets/baseFacets/ownership/OwnershipFacet.sol";
+import {
+    DiamondLoupeFacet
+} from "src/facets/baseFacets/loupe/DiamondLoupeFacet.sol";
+import {
+    OwnershipFacet
+} from "src/facets/baseFacets/ownership/OwnershipFacet.sol";
 
 import {BaseScript} from "./Base.s.sol";
 import {console} from "forge-std/console.sol";
@@ -20,9 +24,14 @@ contract DeployScript is BaseScript {
         DiamondLoupeFacet diamondLoupeFacet = new DiamondLoupeFacet();
         OwnershipFacet ownershipFacet = new OwnershipFacet();
         console.log("DiamondCutFacet deployed to: ", address(diamondCutFacet));
-        console.log("DiamondLoupeFacet deployed to: ", address(diamondLoupeFacet));
+        console.log(
+            "DiamondLoupeFacet deployed to: ",
+            address(diamondLoupeFacet)
+        );
         console.log("OwnershipFacet deployed to: ", address(ownershipFacet));
-        IDiamondCut.FacetCut[] memory _facetCuts = new IDiamondCut.FacetCut[](3);
+        IDiamondCut.FacetCut[] memory _facetCuts = new IDiamondCut.FacetCut[](
+            3
+        );
         bytes4[] memory cutFunctionSelectors = new bytes4[](1);
         cutFunctionSelectors[0] = IDiamondCut.diamondCut.selector;
         _facetCuts[0] = IDiamondCut.FacetCut({
@@ -32,7 +41,9 @@ contract DeployScript is BaseScript {
         });
         bytes4[] memory loupeFunctionSelectors = new bytes4[](5);
         loupeFunctionSelectors[0] = IDiamondLoupe.facets.selector;
-        loupeFunctionSelectors[1] = IDiamondLoupe.facetFunctionSelectors.selector;
+        loupeFunctionSelectors[1] = IDiamondLoupe
+            .facetFunctionSelectors
+            .selector;
         loupeFunctionSelectors[2] = IDiamondLoupe.facetAddresses.selector;
         loupeFunctionSelectors[3] = IDiamondLoupe.facetAddress.selector;
         loupeFunctionSelectors[4] = IERC165.supportsInterface.selector;
