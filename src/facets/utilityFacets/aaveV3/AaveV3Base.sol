@@ -21,11 +21,15 @@ pragma solidity ^0.8.20;
 
 // OpenZeppelin Contracts
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import {
+    SafeERC20
+} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 // Aave Contracts
 import {IPool} from "@aave/aave-v3-core/contracts/interfaces/IPool.sol";
-import {DataTypes} from "@aave/aave-v3-core/contracts/protocol/libraries/types/DataTypes.sol";
+import {
+    DataTypes
+} from "@aave/aave-v3-core/contracts/protocol/libraries/types/DataTypes.sol";
 
 // Local Interfaces
 import {IAaveV3} from "src/facets/utilityFacets/aaveV3/IAaveV3.sol";
@@ -55,8 +59,9 @@ error AaveV3Facet_InsufficientATokenBalance();
 abstract contract AaveV3Base is IAaveV3 {
     using SafeERC20 for IERC20;
 
-    /// @notice The address of the Aave V3 pool on Arbitrum One
-    address private constant AAVE_V3_POOL_ADDRESS = 0x794a61358D6845594F94dc1DB02A252b5b4814aD;
+    /// @notice The address of the Aave V3 pool on Base
+    address private constant AAVE_V3_POOL_ADDRESS =
+        0xA238Dd80C259a72e81d7e4664a9801593F98d1c5;
 
     // ========================================================================
     // Events
@@ -66,13 +71,21 @@ abstract contract AaveV3Base is IAaveV3 {
     /// @param token The token address that was lent
     /// @param amount The amount of tokens lent
     /// @param from The address that initiated the operation (always the diamond)
-    event AaveV3FacetTokensLent(address indexed token, uint256 amount, address from);
+    event AaveV3FacetTokensLent(
+        address indexed token,
+        uint256 amount,
+        address from
+    );
 
     /// @notice Emitted when tokens are withdrawn from Aave
     /// @param token The underlying token address that was withdrawn
     /// @param aTokenBalanceBefore The aToken balance before withdrawal
     /// @param to The recipient address (always the diamond)
-    event AaveV3FacetTokensWithdrawn(address indexed token, uint256 aTokenBalanceBefore, address to);
+    event AaveV3FacetTokensWithdrawn(
+        address indexed token,
+        uint256 aTokenBalanceBefore,
+        address to
+    );
 
     // ========================================================================
     // Internal Functions
@@ -81,7 +94,9 @@ abstract contract AaveV3Base is IAaveV3 {
     /// @notice Gets reserve data from an Aave pool for a specific token
     /// @param tokenIn The underlying asset token address whose reserve data is requested
     /// @return reserveData The Aave ReserveData struct for the token
-    function _getReserveData(address tokenIn) internal view returns (DataTypes.ReserveData memory reserveData) {
+    function _getReserveData(
+        address tokenIn
+    ) internal view returns (DataTypes.ReserveData memory reserveData) {
         reserveData = IPool(AAVE_V3_POOL_ADDRESS).getReserveData(tokenIn);
     }
 
@@ -126,7 +141,11 @@ abstract contract AaveV3Base is IAaveV3 {
         }
 
         // Withdraw underlying tokens to this contract
-        pool.withdraw({asset: tokenIn, amount: amountToWithdraw, to: address(this)});
+        pool.withdraw({
+            asset: tokenIn,
+            amount: amountToWithdraw,
+            to: address(this)
+        });
 
         // Emit event with aToken balance before withdrawal (useful for tracking)
         emit AaveV3FacetTokensWithdrawn(tokenIn, aTokenBalance, address(this));
