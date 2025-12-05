@@ -26,10 +26,14 @@ library DCAFacetStorage {
         address swapRouter;
         // allowed tokens to be used as tokenIn (optional governance)
         mapping(address => bool) allowedTokenIn;
+        // planId => gardenId (0 = no garden, regular DCA plan)
+        mapping(uint256 => uint256) planGarden;
     }
 
     function layout() internal pure returns (Layout storage l) {
         bytes32 position = STORAGE_POSITION;
-        assembly { l.slot := position }
+        assembly {
+            l.slot := position
+        }
     }
 }
